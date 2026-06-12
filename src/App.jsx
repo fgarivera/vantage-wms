@@ -1,16 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import {
-  LayoutDashboard,
-  ArrowDownToLine,
-  Boxes,
-  Grid2x2,
-  Truck,
-  BarChart3,
-} from 'lucide-react'
+import { LayoutDashboard, Boxes, Grid2x2, Truck, BarChart3 } from 'lucide-react'
 import AppShell from './components/AppShell'
 import Phase2 from './components/Phase2'
 import { ToastProvider } from './components/toast'
 import Copilot from './screens/Copilot'
+import Inbound from './screens/Inbound'
 
 export default function App() {
   return (
@@ -29,16 +23,7 @@ export default function App() {
             }
           />
           <Route path="/copilot" element={<Copilot />} />
-          <Route
-            path="/inbound"
-            element={
-              <Phase2
-                icon={ArrowDownToLine}
-                title="Inbound"
-                description="Screen 2 — building next. Smart receiving with AI document extraction."
-              />
-            }
-          />
+          <Route path="/inbound" element={<Inbound />} />
           <Route
             path="/inventory"
             element={

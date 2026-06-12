@@ -1,0 +1,7 @@
+node_modules
+dist
+*.local
+
+# local machine workarounds (path contains '#'; see dev.cmd)
+dev.cmd
+.claude/launch.json

@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-canvas text-ink;
+  }
+
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid #3538cd;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Operational codes — SKUs, bins, ASN/PO/order numbers — render as tokens */
+  .code-token {
+    @apply inline-flex items-center rounded-md border border-line bg-canvas px-1.5 py-0.5 font-mono text-[12px] font-medium text-ink-secondary;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .typing-dot {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-ink-faint;
+    animation: typing-bounce 1s infinite ease-in-out;
+  }
+}
+
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}

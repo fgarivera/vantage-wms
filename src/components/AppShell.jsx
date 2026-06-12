@@ -15,7 +15,7 @@ import {
 import { site } from '../data/seed'
 
 const nav = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/copilot', label: 'Copilot', icon: Sparkles },
   { to: '/inbound', label: 'Inbound', icon: ArrowDownToLine },
   {
@@ -73,7 +73,7 @@ function Sidebar() {
         ))}
       </nav>
       <div className="border-t border-line p-3 text-[11px] text-ink-faint">
-        v0.1 · {pathname === '/' ? 'dashboard' : pathname.slice(1)}
+        v0.1 · {pathname.slice(1) || 'copilot'}
       </div>
     </aside>
   )

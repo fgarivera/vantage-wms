@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LayoutDashboard, Boxes, Truck, BarChart3 } from 'lucide-react'
 import AppShell from './components/AppShell'
 import Phase2 from './components/Phase2'
@@ -13,8 +13,9 @@ export default function App() {
       <ToastProvider>
       <Routes>
         <Route element={<AppShell />}>
+          <Route index element={<Navigate to="/copilot" replace />} />
           <Route
-            index
+            path="/dashboard"
             element={
               <Phase2
                 icon={LayoutDashboard}

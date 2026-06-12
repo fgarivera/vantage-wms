@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { LayoutDashboard, Boxes, Grid2x2, Truck, BarChart3 } from 'lucide-react'
+import { LayoutDashboard, Boxes, Truck, BarChart3 } from 'lucide-react'
 import AppShell from './components/AppShell'
 import Phase2 from './components/Phase2'
 import { ToastProvider } from './components/toast'
 import Copilot from './screens/Copilot'
 import Inbound from './screens/Inbound'
+import Slotting from './screens/Slotting'
 
 export default function App() {
   return (
@@ -34,16 +35,7 @@ export default function App() {
               />
             }
           />
-          <Route
-            path="/slotting"
-            element={
-              <Phase2
-                icon={Grid2x2}
-                title="AI Slotting"
-                description="Screen 3 — building next. Ranked slotting moves with projected pick-path impact."
-              />
-            }
-          />
+          <Route path="/slotting" element={<Slotting />} />
           <Route
             path="/outbound"
             element={

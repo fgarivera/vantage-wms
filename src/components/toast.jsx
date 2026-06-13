@@ -29,7 +29,7 @@ export function ToastProvider({ children }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="pointer-events-auto flex items-center gap-2.5 rounded-card border border-line bg-white px-4 py-3 text-[13px] font-medium text-ink shadow-panel"
+            className="anim-rise pointer-events-auto flex items-center gap-2.5 rounded-card border border-line bg-white px-4 py-3 text-[13px] font-medium text-ink shadow-panel"
           >
             <CheckCircle2 size={16} className="shrink-0 text-sev-green" aria-hidden="true" />
             {t.message}

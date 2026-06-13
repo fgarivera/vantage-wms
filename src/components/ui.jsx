@@ -49,6 +49,43 @@ export function SeverityBadge({ severity }) {
   )
 }
 
+// Tiny inline trend chart for 14-day velocity data. Hand-rolled SVG — no
+// charting library needed at this size.
+export function Sparkline({ data, width = 64, height = 18 }) {
+  const min = Math.min(...data)
+  const max = Math.max(...data)
+  const range = max - min || 1
+  const pad = 2
+  const points = data
+    .map((v, i) => {
+      const x = pad + (i / (data.length - 1)) * (width - pad * 2)
+      const y = height - pad - ((v - min) / range) * (height - pad * 2)
+      return `${x.toFixed(1)},${y.toFixed(1)}`
+    })
+    .join(' ')
+  const [lastX, lastY] = points.split(' ').pop().split(',')
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      className="inline-block align-middle"
+      aria-hidden="true"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        stroke="#3538CD"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+      <circle cx={lastX} cy={lastY} r="1.75" fill="#3538CD" />
+    </svg>
+  )
+}
+
 export function PageFooter() {
   return (
     <p className="px-6 pb-4 pt-2 text-[11px] text-ink-faint">Phase 1 prototype · seeded data</p>

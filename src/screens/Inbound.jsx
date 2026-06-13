@@ -247,14 +247,14 @@ function FlagPanel({ line, onResolve, onClose }) {
   return (
     <>
       <div
-        className="fixed inset-0 z-40 bg-ink/20"
+        className="anim-fade fixed inset-0 z-40 bg-ink/20"
         onClick={onClose}
         aria-hidden="true"
       />
       <aside
         role="dialog"
         aria-label="Review flagged line"
-        className="fixed inset-y-0 right-0 z-50 flex w-[400px] flex-col border-l border-line bg-white shadow-panel"
+        className="anim-slide-right fixed inset-y-0 right-0 z-50 flex w-[400px] flex-col border-l border-line bg-white shadow-panel"
       >
         <header className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
           <div>

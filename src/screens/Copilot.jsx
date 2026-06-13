@@ -10,7 +10,7 @@ import {
   skus,
   snapshot,
 } from '../data/seed'
-import { CodeToken, PageFooter, ReasonChip, SeverityBadge } from '../components/ui'
+import { CodeToken, PageFooter, ReasonChip, SeverityBadge, Sparkline } from '../components/ui'
 import { useToast } from '../components/toast'
 
 // ── Canned assistant responses (keyword-matched, all from seed data) ─────────
@@ -19,6 +19,41 @@ const earbuds = getSku('SKU-88412')
 
 function matchResponse(text) {
   const t = text.toLowerCase()
+  if (/(risk|sla|cutoff|late|miss)/.test(t)) {
+    return [
+      {
+        kind: 'p',
+        text: (
+          <>
+            3 orders are at risk of missing today’s cutoffs. Two share the same root cause —{' '}
+            <CodeToken>SKU-88412</CodeToken> is short 140 units until{' '}
+            <CodeToken>ASN-2291</CodeToken> is received.
+          </>
+        ),
+      },
+      { kind: 'ordersTable' },
+    ]
+  }
+  if (/(supplier|vendor|hua-tech|short.?ship)/.test(t)) {
+    return [
+      {
+        kind: 'p',
+        text: (
+          <>
+            One supplier needs attention: Hua-Tech Electronics has short-shipped twice in the last
+            90 days on this lane. Their current shipment <CodeToken>ASN-2291</CodeToken> (
+            <CodeToken>PO-7716</CodeToken>) has a 20-unit discrepancy I flagged at 71% confidence —
+            it’s waiting on a receiving decision now.
+          </>
+        ),
+      },
+      {
+        kind: 'reason',
+        text: 'This answer uses 90 days of receiving history. Full supplier scorecards are planned for Phase 2.',
+      },
+      { kind: 'link', label: 'Review ASN-2291 in Inbound', to: '/inbound' },
+    ]
+  }
   if (/(where|locate|find)/.test(t)) {
     return [
       {
@@ -90,6 +125,7 @@ const suggestedPrompts = [
   'Where is SKU-88412 stocked?',
   'Show stock levels for A-tier SKUs',
   'How’s labor utilization today?',
+  'Which suppliers short-shipped recently?',
 ]
 
 // ── Message blocks ───────────────────────────────────────────────────────────
@@ -143,6 +179,7 @@ function StockTable() {
             <th className="px-3 py-2">Item</th>
             <th className="px-3 py-2 text-right">On hand</th>
             <th className="px-3 py-2 text-right">Demand today</th>
+            <th className="px-3 py-2">14-day trend</th>
             <th className="px-3 py-2">Status</th>
           </tr>
         </thead>
@@ -158,6 +195,22 @@ function StockTable() {
                 <td className="px-3 py-2 text-right font-mono text-[12px] tabular">{s.onHand}</td>
                 <td className="px-3 py-2 text-right font-mono text-[12px] tabular">
                   {s.demandToday}
+                </td>
+                <td className="px-3 py-2">
+                  <span className="flex items-center gap-1.5">
+                    <Sparkline data={s.trend14d} />
+                    <span
+                      className={`text-[11px] font-medium tabular ${
+                        s.velocityDelta.startsWith('+')
+                          ? 'text-sev-green'
+                          : s.velocityDelta.startsWith('-')
+                            ? 'text-sev-red'
+                            : 'text-ink-muted'
+                      }`}
+                    >
+                      {s.velocityDelta}
+                    </span>
+                  </span>
                 </td>
                 <td className="px-3 py-2">
                   {short ? (
@@ -249,7 +302,7 @@ function TypingIndicator() {
 
 function ExceptionCard({ exc }) {
   return (
-    <div className="flex flex-col gap-1.5 rounded-card border border-line bg-white p-3.5 shadow-card">
+    <div className="flex flex-col gap-1.5 rounded-card border border-line bg-white p-3.5 shadow-card transition-shadow hover:shadow-panel">
       <div className="flex items-center justify-between gap-2">
         <SeverityBadge severity={exc.severity} />
       </div>

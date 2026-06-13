@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Check, CheckCircle2, X } from 'lucide-react'
+import { ArrowRight, Check, CheckCircle2, Sparkles, X } from 'lucide-react'
 import { slottingRecs, slottingSummary, zones } from '../data/seed'
 import { CodeToken, PageFooter, ReasonChip } from '../components/ui'
 import { useToast } from '../components/toast'
@@ -256,6 +256,11 @@ export default function Slotting() {
                   All caught up — no open recommendations. The model re-ranks overnight.
                 </p>
               )}
+              <div className="flex items-center gap-1.5 border-t border-line bg-canvas/70 px-4 py-2.5 text-[12px] text-ink-muted">
+                <Sparkles size={12} className="shrink-0 text-accent" aria-hidden="true" />
+                3 more candidates scored below the 75% reasoning threshold — the model doesn’t
+                recommend moves it can’t justify.
+              </div>
             </section>
 
             {accepted.length > 0 && (

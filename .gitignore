@@ -5,3 +5,6 @@ dist
 # local machine workarounds (path contains '#'; see dev.cmd)
 dev.cmd
 .claude/launch.json
+
+# interview prep material — never publish
+project_context.md

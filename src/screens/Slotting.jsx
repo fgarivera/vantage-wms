@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { ArrowRight, Check, CheckCircle2, Sparkles, X } from 'lucide-react'
-import { slottingRecs, slottingSummary, zones } from '../data/seed'
-import { CodeToken, PageFooter, ReasonChip } from '../components/ui'
+import { ArrowRight, Check, CheckCircle2, ChevronDown, Clock, Sparkles, X } from 'lucide-react'
+import { getSku, slottingRecs, slottingSummary, zones } from '../data/seed'
+import { CodeToken, PageFooter, ReasonChip, Sparkline } from '../components/ui'
 import { useToast } from '../components/toast'
 
 // Indigo intensity by pick velocity. Calm, on-brand — not a traffic light.
@@ -152,44 +152,106 @@ function HeatLegend() {
   )
 }
 
-function RecRow({ rec, onAccept, onDismiss }) {
+function EvidenceDrawer({ rec }) {
+  const sku = getSku(rec.sku)
   return (
-    <li className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0 hover:bg-canvas">
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <CodeToken>{rec.sku}</CodeToken>
-          <span className="text-[13px] font-medium">{rec.name}</span>
-          <span className="flex items-center gap-1.5">
-            <CodeToken>{rec.fromBin}</CodeToken>
-            <ArrowRight size={13} className="text-ink-faint" aria-hidden="true" />
-            <CodeToken className="border-accent/30 bg-accent-soft text-accent">
-              {rec.toBin}
-            </CodeToken>
-          </span>
+    <div className="anim-rise border-t border-line bg-canvas/70 px-4 py-3">
+      <div className="flex flex-wrap items-start gap-x-8 gap-y-3">
+        <div>
+          <div className="text-[11px] font-medium uppercase tracking-wide text-ink-muted">
+            14-day pick trend
+          </div>
+          <div className="mt-1.5 flex items-center gap-2">
+            <Sparkline data={sku.trend14d} width={96} height={26} />
+            <span
+              className={`text-[12px] font-semibold tabular ${
+                sku.velocityDelta.startsWith('+')
+                  ? 'text-sev-green'
+                  : sku.velocityDelta.startsWith('-')
+                    ? 'text-sev-red'
+                    : 'text-ink-muted'
+              }`}
+            >
+              {sku.velocityDelta}
+            </span>
+          </div>
         </div>
-        <div className="mt-1.5 flex flex-wrap items-center gap-2">
-          <ReasonChip>{rec.reason}</ReasonChip>
-          <span className="text-[12px] text-ink-muted">{rec.impact}</span>
+        <div className="min-w-0 flex-1">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-ink-muted">
+            Why the model recommends this
+          </div>
+          <ul className="mt-1.5 space-y-1">
+            {rec.evidence.facts.map((f) => (
+              <li key={f} className="flex items-start gap-1.5 text-[12.5px] text-ink-secondary">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink-faint" aria-hidden="true" />
+                {f}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
-        <button
-          type="button"
-          onClick={() => onAccept(rec.id)}
-          className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-[#2A2DB3]"
-        >
-          <Check size={14} aria-hidden="true" />
-          Accept
-        </button>
-        <button
-          type="button"
-          onClick={() => onDismiss(rec.id)}
-          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-white px-3 py-1.5 text-[12.5px] font-medium text-ink-secondary hover:border-ink-faint hover:text-ink"
-        >
-          <X size={14} aria-hidden="true" />
-          Dismiss
-        </button>
+      <div className="mt-2.5 flex items-center gap-1.5 text-[12px] text-ink-muted">
+        <Clock size={12} className="shrink-0" aria-hidden="true" />
+        Move cost: {rec.evidence.cost}
       </div>
+    </div>
+  )
+}
+
+function RecRow({ rec, expanded, onToggle, onAccept, onDismiss }) {
+  return (
+    <li className="border-b border-line last:border-b-0">
+      <div className="flex items-center gap-4 px-4 py-3 hover:bg-canvas">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <CodeToken>{rec.sku}</CodeToken>
+            <span className="text-[13px] font-medium">{rec.name}</span>
+            <span className="flex items-center gap-1.5">
+              <CodeToken>{rec.fromBin}</CodeToken>
+              <ArrowRight size={13} className="text-ink-faint" aria-hidden="true" />
+              <CodeToken className="border-accent/30 bg-accent-soft text-accent">
+                {rec.toBin}
+              </CodeToken>
+            </span>
+          </div>
+          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            <ReasonChip>{rec.reason}</ReasonChip>
+            <span className="text-[12px] text-ink-muted">{rec.impact}</span>
+            <button
+              type="button"
+              onClick={() => onToggle(rec.id)}
+              aria-expanded={expanded}
+              className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[12px] font-medium text-accent hover:bg-accent-soft"
+            >
+              Evidence
+              <ChevronDown
+                size={13}
+                className={`transition-transform ${expanded ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onAccept(rec.id)}
+            className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-[#2A2DB3]"
+          >
+            <Check size={14} aria-hidden="true" />
+            Accept
+          </button>
+          <button
+            type="button"
+            onClick={() => onDismiss(rec.id)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-line bg-white px-3 py-1.5 text-[12.5px] font-medium text-ink-secondary hover:border-ink-faint hover:text-ink"
+          >
+            <X size={14} aria-hidden="true" />
+            Dismiss
+          </button>
+        </div>
+      </div>
+      {expanded && <EvidenceDrawer rec={rec} />}
     </li>
   )
 }
@@ -197,10 +259,13 @@ function RecRow({ rec, onAccept, onDismiss }) {
 export default function Slotting() {
   const toast = useToast()
   const [statuses, setStatuses] = useState({}) // id → 'accepted' | 'dismissed'
+  const [expandedId, setExpandedId] = useState(null)
 
   const pending = slottingRecs.filter((r) => !statuses[r.id])
   const accepted = slottingRecs.filter((r) => statuses[r.id] === 'accepted')
   const dismissedCount = slottingRecs.filter((r) => statuses[r.id] === 'dismissed').length
+  const acceptedMeters = accepted.reduce((sum, r) => sum + r.metersPerDay, 0)
+  const acceptedBins = accepted.filter((r) => r.impact.startsWith('frees')).length
 
   function accept(id) {
     setStatuses((s) => ({ ...s, [id]: 'accepted' }))
@@ -258,7 +323,14 @@ export default function Slotting() {
               {pending.length > 0 ? (
                 <ul>
                   {pending.map((r) => (
-                    <RecRow key={r.id} rec={r} onAccept={accept} onDismiss={dismiss} />
+                    <RecRow
+                      key={r.id}
+                      rec={r}
+                      expanded={expandedId === r.id}
+                      onToggle={(id) => setExpandedId((cur) => (cur === id ? null : id))}
+                      onAccept={accept}
+                      onDismiss={dismiss}
+                    />
                   ))}
                 </ul>
               ) : (
@@ -278,10 +350,15 @@ export default function Slotting() {
                 aria-label="Accepted today"
                 className="overflow-hidden rounded-card border border-line bg-white shadow-card"
               >
-                <h2 className="border-b border-line px-4 py-3 text-[13px] font-semibold">
+                <h2 className="flex items-center border-b border-line px-4 py-3 text-[13px] font-semibold">
                   Accepted today{' '}
-                  <span className="ml-1 rounded-full bg-sev-green-bg px-2 py-0.5 font-mono text-[11px] text-sev-green tabular">
+                  <span className="ml-2 rounded-full bg-sev-green-bg px-2 py-0.5 font-mono text-[11px] text-sev-green tabular">
                     {accepted.length}
+                  </span>
+                  <span className="ml-auto text-[12px] font-medium text-sev-green tabular">
+                    {acceptedMeters > 0 && `saving ~${acceptedMeters} pick-meters/day`}
+                    {acceptedMeters > 0 && acceptedBins > 0 && ' · '}
+                    {acceptedBins > 0 && `${acceptedBins} bin${acceptedBins > 1 ? 's' : ''} freed`}
                   </span>
                 </h2>
                 <ul>

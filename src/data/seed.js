@@ -430,6 +430,8 @@ export const slottingSummary = {
   projected: 'projected 9% pick-path reduction this week',
 }
 
+// Each rec carries the evidence behind it — the drawer on the Slotting screen
+// renders these so the AI's reasoning is inspectable, not just asserted.
 export const slottingRecs = [
   {
     id: 'REC-01',
@@ -439,7 +441,16 @@ export const slottingRecs = [
     toBin: 'A-02-04',
     reason: 'Velocity up 38% over 14 days — move to forward-pick',
     impact: 'saves ~210 pick-meters/day',
+    metersPerDay: 210,
     confidence: 96,
+    evidence: {
+      facts: [
+        'Velocity: ~31 → ~58 picks/day over 14 days (+38%)',
+        'Forward-pick slot shortens each pick path by ~3.6 m',
+        '58 picks/day × 3.6 m ≈ 210 pick-meters/day saved',
+      ],
+      cost: '~12 min · 1 associate · pallet jack · best window 13:00–14:00 lull',
+    },
   },
   {
     id: 'REC-02',
@@ -449,7 +460,16 @@ export const slottingRecs = [
     toBin: 'A-04-06',
     reason: 'Velocity up 24% over 14 days — promote to forward-pick',
     impact: 'saves ~140 pick-meters/day',
+    metersPerDay: 140,
     confidence: 94,
+    evidence: {
+      facts: [
+        'Velocity: ~30 → ~37 picks/day over 14 days (+24%)',
+        'Zone B → A cuts ~3.8 m per pick',
+        '37 picks/day × 3.8 m ≈ 140 pick-meters/day saved',
+      ],
+      cost: '~10 min · 1 associate · best window 13:00–14:00 lull',
+    },
   },
   {
     id: 'REC-03',
@@ -459,7 +479,16 @@ export const slottingRecs = [
     toBin: 'D-05-09',
     reason: 'Velocity down 31% — release a prime forward-pick slot',
     impact: 'frees 1 forward-pick bin',
+    metersPerDay: 0,
     confidence: 92,
+    evidence: {
+      facts: [
+        'Velocity: 18 → 12 picks/day over 14 days (−31%)',
+        'A-05-01 is prime forward-pick real estate next to pack-out',
+        'Freed slot absorbs the next A-zone promotion in this list',
+      ],
+      cost: '~15 min · 1 associate · run during off-peak',
+    },
   },
   {
     id: 'REC-04',
@@ -469,7 +498,16 @@ export const slottingRecs = [
     toBin: 'B-02-12',
     reason: 'Velocity up 18% — move one zone forward',
     impact: 'saves ~90 pick-meters/day',
+    metersPerDay: 90,
     confidence: 91,
+    evidence: {
+      facts: [
+        'Velocity: ~22 → ~30 picks/day over 14 days (+18%)',
+        'One-zone promotion cuts ~3 m per pick',
+        '30 picks/day × 3 m ≈ 90 pick-meters/day saved',
+      ],
+      cost: '~10 min · 1 associate',
+    },
   },
   {
     id: 'REC-05',
@@ -479,7 +517,16 @@ export const slottingRecs = [
     toBin: 'C-12-02',
     reason: 'Frequently kitted with SKU-88412 — stage nearer forward-pick',
     impact: 'saves ~45 pick-meters/day',
+    metersPerDay: 45,
     confidence: 88,
+    evidence: {
+      facts: [
+        'Kitted with SKU-88412 in 64% of its picks',
+        'Staging near forward-pick cuts ~2.8 m per kit',
+        '16 kits/day × 2.8 m ≈ 45 pick-meters/day saved',
+      ],
+      cost: '~14 min · 1 associate · deep-storage retrieval',
+    },
   },
   {
     id: 'REC-06',
@@ -489,7 +536,16 @@ export const slottingRecs = [
     toBin: 'B-08-04',
     reason: 'Velocity up 15% over 14 days — move one zone forward',
     impact: 'saves ~70 pick-meters/day',
+    metersPerDay: 70,
     confidence: 87,
+    evidence: {
+      facts: [
+        'Velocity: ~10 → ~15 picks/day over 14 days (+15%)',
+        'Zone C → B cuts ~4.7 m per pick',
+        '15 picks/day × 4.7 m ≈ 70 pick-meters/day saved',
+      ],
+      cost: '~10 min · 1 associate',
+    },
   },
   {
     id: 'REC-07',
@@ -499,7 +555,16 @@ export const slottingRecs = [
     toBin: 'B-01-06',
     reason: 'Picked with SKU-77103 in 31% of orders — co-locate',
     impact: 'saves ~60 pick-meters/day',
+    metersPerDay: 60,
     confidence: 85,
+    evidence: {
+      facts: [
+        'Appears with SKU-77103 in 31% of multi-line orders',
+        'Co-location merges two aisle visits into one stop',
+        '~24 co-picks/day × 2.5 m ≈ 60 pick-meters/day saved',
+      ],
+      cost: '~9 min · 1 associate',
+    },
   },
   {
     id: 'REC-08',
@@ -509,7 +574,16 @@ export const slottingRecs = [
     toBin: 'B-02-09',
     reason: 'Cluster with other desk accessories picked together',
     impact: 'saves ~40 pick-meters/day',
+    metersPerDay: 40,
     confidence: 84,
+    evidence: {
+      facts: [
+        'Desk-accessory cluster appears in 22% of multi-line orders',
+        'Adjacency cuts ~2.2 m per multi-line order',
+        '~18 orders/day × 2.2 m ≈ 40 pick-meters/day saved',
+      ],
+      cost: '~9 min · 1 associate',
+    },
   },
   {
     id: 'REC-09',
@@ -519,7 +593,16 @@ export const slottingRecs = [
     toBin: 'B-03-05',
     reason: 'Joins the laptop-accessory pick cluster in aisle B-03',
     impact: 'saves ~35 pick-meters/day',
+    metersPerDay: 35,
     confidence: 82,
+    evidence: {
+      facts: [
+        'Picked alongside the laptop-accessory cluster in aisle B-03',
+        'Cuts ~2.2 m per multi-line pick',
+        '16 picks/day × 2.2 m ≈ 35 pick-meters/day saved',
+      ],
+      cost: '~9 min · 1 associate',
+    },
   },
   {
     id: 'REC-10',
@@ -529,7 +612,16 @@ export const slottingRecs = [
     toBin: 'D-06-01',
     reason: 'Bulky carton slotted above shoulder height — move to floor level',
     impact: 'reduces handling strain',
+    metersPerDay: 0,
     confidence: 81,
+    evidence: {
+      facts: [
+        '9.4 kg carton stored at 1.9 m shelf height',
+        'Above-shoulder picks correlate with strain incidents',
+        'Floor-level slot D-06-01 is open in the same aisle',
+      ],
+      cost: '~8 min · 1 associate',
+    },
   },
   {
     id: 'REC-11',
@@ -539,7 +631,16 @@ export const slottingRecs = [
     toBin: 'D-02-03',
     reason: 'Shortens travel within Zone D for weekly replenishment',
     impact: 'saves ~20 pick-meters/day',
+    metersPerDay: 20,
     confidence: 79,
+    evidence: {
+      facts: [
+        'Current slot sits at the far end of the Zone D aisle',
+        'D-02-03 is at the aisle head, near the zone entry',
+        '6 picks/day × 3.3 m ≈ 20 pick-meters/day saved',
+      ],
+      cost: '~8 min · 1 associate',
+    },
   },
   {
     id: 'REC-12',
@@ -549,6 +650,15 @@ export const slottingRecs = [
     toBin: 'E-06-02',
     reason: 'Consolidates inventory split across two deep-storage bins',
     impact: 'frees 1 storage bin',
+    metersPerDay: 0,
     confidence: 78,
+    evidence: {
+      facts: [
+        'On-hand is split across E-02-10 and E-06-02',
+        'Consolidating frees one deep-storage bin',
+        'Single-bin SKUs cut cycle-count time in Zone E',
+      ],
+      cost: '~12 min · 1 associate · run during off-peak',
+    },
   },
 ]

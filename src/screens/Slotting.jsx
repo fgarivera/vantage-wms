@@ -47,8 +47,8 @@ function ZoneHeatmap() {
             />
             <text
               x={r.x + 12}
-              y={r.y + 26}
-              fontSize="15"
+              y={r.y + 24}
+              fontSize="14"
               fontWeight="600"
               fill={tone.text}
               fontFamily="Inter, sans-serif"
@@ -57,13 +57,23 @@ function ZoneHeatmap() {
             </text>
             <text
               x={r.x + 12}
-              y={r.y + 44}
-              fontSize="11"
+              y={r.y + 40}
+              fontSize="10.5"
               fill={tone.text}
               fillOpacity="0.85"
               fontFamily="Inter, sans-serif"
             >
-              {z[r.zone].label} · {z[r.zone].picksPerDay.toLocaleString()} picks/day
+              {z[r.zone].label}
+            </text>
+            <text
+              x={r.x + 12}
+              y={r.y + 55}
+              fontSize="10.5"
+              fill={tone.text}
+              fillOpacity="0.85"
+              fontFamily="Inter, sans-serif"
+            >
+              {z[r.zone].picksPerDay.toLocaleString()} picks/day
             </text>
           </g>
         )
